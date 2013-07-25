@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MomoWeatherWidget</string>
+    <string name="weather_result">Here\'s the weather!</string>
+    <string name="enter_city">Enter City</string>
+    <string name="get_weather">Get Weather</string>
+    <string name="widget_label">Momo Weather Widget</string>
+    <string name="date">Wednesday\nJuly 19, 2013</string>
+    <string name="action_settings">Setting</string>
+    <string name="tv_config_city">City:</string>
+    <string name="hint_config_city">City</string>
+    <string name="hint_config_zip">Zip/Postal Code</string>
+    <string name="textview_config_zip">Zip/Postal:</string>
+    <string name="btn_config_fahrenheit">Fahrenheit</string>
+    <string name="btn_config_celsius">Celsius</string>
+    <string name="textview_config_format">Format:</string>
+    <string name="btn_config_find_city">Find City</string>
+    <string name="btn_config_done">Done</string>
+
+    <array name="config_cities">
+        <item>Moncton</item>
+        <item>Toronto</item>
+        <item>Montreal</item>
+        <item>Paris</item>
+        <item>Moncton</item>
+        <item>Toronto</item>
+        <item>Montreal</item>
+        <item>Paris</item>
+    </array>
+
+</resources>
