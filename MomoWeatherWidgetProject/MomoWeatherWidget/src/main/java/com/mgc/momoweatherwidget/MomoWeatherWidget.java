@@ -1,5 +1,6 @@
 package com.mgc.momoweatherwidget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -45,6 +46,11 @@ public class MomoWeatherWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.temp_low, convertTemperature(results.get("temp_low")));
         }
         views.setTextViewText(R.id.location, mCityName);
+
+        Intent intent = new Intent(context, WidgetConfigurationActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
 
@@ -118,7 +124,8 @@ public class MomoWeatherWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d(TAG, "onUpdate");
 
-        final int N = appWidgetIds.length;
+        int N = appWidgetIds.length;
+        Log.d(TAG, "number of widget on host: " + N);
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
             HashMap<String, String> prefs = WidgetConfigurationActivity.loadPreference(context, appWidgetId);

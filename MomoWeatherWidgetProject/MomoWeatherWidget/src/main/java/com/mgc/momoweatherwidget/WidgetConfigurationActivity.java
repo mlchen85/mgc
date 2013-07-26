@@ -68,12 +68,21 @@ public class WidgetConfigurationActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setResult(RESULT_CANCELED);
-
-        this.setContentView(R.layout.config_activity);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
+
+        if (extras != null) {
+            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        }
+
+
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            finish();
+        }
+        setResult(RESULT_CANCELED);
+
+        this.setContentView(R.layout.config_activity);
 
         tv_city = (TextView) findViewById(R.id.textView_config_city);
         et_city = (EditText) findViewById(R.id.editText_config_city);
@@ -178,15 +187,6 @@ public class WidgetConfigurationActivity extends Activity {
                 }
             }
         });
-
-
-        if (extras != null) {
-            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
-
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-        }
 
 
     }
