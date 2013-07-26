@@ -64,8 +64,41 @@ public class WidgetConfigurationActivity extends Activity {
         return map;
     }
 
+    static void deletePreference(Context context, int appWidgetId) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.remove(PREFS_PREFIX + appWidgetId + "_cityUri");
+        editor.remove(PREFS_PREFIX + appWidgetId + "_cityName");
+        editor.remove(PREFS_PREFIX + appWidgetId + "_temp_format");
+        editor.commit();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
 
@@ -151,7 +184,7 @@ public class WidgetConfigurationActivity extends Activity {
                     toast.show();
                 } else {
                     if (city.contains(" ")) {
-                        city.replace(" ", "%20");
+                        city = city.replaceAll(" ", "%20");
                     }
                     try {
                         String jsonString = new FindCityStub().execute(city).get();

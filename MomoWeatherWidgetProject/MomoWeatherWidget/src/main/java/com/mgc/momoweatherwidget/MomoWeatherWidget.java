@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -48,8 +49,11 @@ public class MomoWeatherWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.location, mCityName);
 
         Intent intent = new Intent(context, WidgetConfigurationActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Bundle extras = new Bundle();
+        extras.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.putExtras(extras);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
         views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -135,16 +139,11 @@ public class MomoWeatherWidget extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
-    }
+        Log.d(TAG, "onDeleted");
+        final int N = appWidgetIds.length;
+        for (int i = 0; i < N; i++) {
+            WidgetConfigurationActivity.deletePreference(context, appWidgetIds[i]);
+        }
 
-    @Override
-    public void onEnabled(Context context) {
-        super.onEnabled(context);
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        super.onDisabled(context);
     }
 }
