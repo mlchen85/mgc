@@ -6,6 +6,6 @@
         android:minHeight="40dp"
         android:label="Momo Weather Widget"
         android:resizeMode="none"
-        android:updatePeriodMillis="3600000"
+        android:updatePeriodMillis="180000"
         android:configure="com.mgc.momoweatherwidget.WidgetConfigurationActivity"
         />

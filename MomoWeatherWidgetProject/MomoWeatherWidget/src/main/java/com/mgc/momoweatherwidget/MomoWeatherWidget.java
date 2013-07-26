@@ -22,28 +22,28 @@ public class MomoWeatherWidget extends AppWidgetProvider {
 
     private static final String TAG = "MomoWeatherWidget";
     private static String mCityUri = "";
-    private static int mTempFormat = 0;
+    private static String mTempFormat = "";
     private static String mCityName = "";
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, String cityUri, String cityName, int tempFormat) {
-        mCityUri = cityUri;
-        mTempFormat = tempFormat;
-        mCityName = cityName;
-
-        updateAppWidget(context, appWidgetManager, appWidgetId);
-
-    }
-
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, HashMap<String, String> prefs) {
 
         Log.d(TAG, "updateAppWidget appWidgetId=" + appWidgetId);
+        mCityUri = prefs.get("cityUri");
+        mTempFormat = prefs.get("temp_format");
+        mCityName = prefs.get("cityName");
+
         HashMap<String, String> results = getWeather();
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
 
         views.setImageViewBitmap(R.id.weather_icon, getWeatherIcon(results.get("icon")));
         views.setTextViewText(R.id.period, setPeriod(results.get("weekday"), results.get("day"), results.get("month"), results.get("year")));
-        views.setTextViewText(R.id.temp_high, results.get("temp_high"));
-        views.setTextViewText(R.id.temp_low, results.get("temp_low"));
+        if (mTempFormat == "C") {
+            views.setTextViewText(R.id.temp_high, results.get("temp_high"));
+            views.setTextViewText(R.id.temp_low, results.get("temp_low"));
+        } else if (mTempFormat == "F") {
+            views.setTextViewText(R.id.temp_high, convertTemperature(results.get("temp_high")));
+            views.setTextViewText(R.id.temp_low, convertTemperature(results.get("temp_low")));
+        }
         views.setTextViewText(R.id.location, mCityName);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -104,6 +104,11 @@ public class MomoWeatherWidget extends AppWidgetProvider {
         return map;
     }
 
+    private static String convertTemperature(String celsius) {
+        Integer c = new Integer(celsius);
+        return String.valueOf(c * 9 / 5 + 32);
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -116,7 +121,8 @@ public class MomoWeatherWidget extends AppWidgetProvider {
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            HashMap<String, String> prefs = WidgetConfigurationActivity.loadPreference(context, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, prefs);
         }
     }
 
