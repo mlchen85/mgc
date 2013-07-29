@@ -128,7 +128,7 @@ public class MomoWeatherWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d(TAG, "onUpdate");
 
-        int N = appWidgetIds.length;
+        final int N = appWidgetIds.length;
         Log.d(TAG, "number of widget on host: " + N);
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
