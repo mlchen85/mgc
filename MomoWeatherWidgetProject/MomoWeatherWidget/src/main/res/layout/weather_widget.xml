@@ -1,65 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnCount="2"
-        android:rowCount="2"
         android:id="@+id/widget_layout"
-        >
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
     <TextView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:textSize="16sp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/temp_high"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:text="Now!"
+            android:id="@+id/textView_now"
+            android:textSize="40sp"
             android:gravity="center"
-            android:background="@android:color/holo_red_light"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"/>
+            android:background="@android:color/holo_green_light"
+            android:scaleY="1"/>
 
     <TextView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:textSize="16sp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:gravity="center"
-            android:id="@+id/temp_low"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:text="Scattered Clouds"
+            android:id="@+id/textView_weather"
+            android:lines="2"
+            android:textSize="25sp"
             android:background="@android:color/holo_blue_light"
-            android:layout_below="@id/temp_high"
-            android:layout_alignParentRight="true"/>
-
-    <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/weather_icon"
-            android:layout_toLeftOf="@id/temp_high"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/white"/>
+            android:gravity="center"/>
 
     <TextView
-            android:layout_width="170dp"
-            android:layout_height="20dp"
-            android:textSize="18sp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:gravity="center"
-            android:id="@+id/location"
-            android:background="@android:color/holo_green_light"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/weather_icon"/>
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="27"
+            android:id="@+id/textView_temp"
+            android:textSize="35sp"
+            android:scaleY="1"
+            android:background="@android:color/holo_purple"
+            android:gravity="center"/>
 
-    <TextView
-            android:layout_width="170dp"
-            android:layout_height="20dp"
-            android:textSize="14sp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:gravity="center"
-            android:id="@+id/period"
-            android:background="@android:color/holo_green_light"
-            android:layout_below="@id/location"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/weather_icon"/>
-</RelativeLayout>
+
+</LinearLayout>

@@ -7,7 +7,7 @@ import android.os.AsyncTask;
  */
 public class WeatherStub extends AsyncTask<String, Void, String> {
 
-    private String url = "http://api.wunderground.com/api/35dea2c484dd551c/forecast";
+    private String url = "http://api.wunderground.com/api/35dea2c484dd551c/conditions";
 
     @Override
     protected String doInBackground(String... cityUri) {

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,19 +33,18 @@ public class MomoWeatherWidget extends AppWidgetProvider {
         mTempFormat = prefs.get("temp_format");
         mCityName = prefs.get("cityName");
 
-        HashMap<String, String> results = getWeather();
+        HashMap<String, String> results = getCurrentCondition(mCityUri);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
 
-        views.setImageViewBitmap(R.id.weather_icon, getWeatherIcon(results.get("icon")));
-        views.setTextViewText(R.id.period, setPeriod(results.get("weekday"), results.get("day"), results.get("month"), results.get("year")));
+//        views.setImageViewBitmap(R.id.weather_icon, getWeatherIcon(results.get("icon")));
+//        views.setTextViewText(R.id.period, setPeriod(results.get("weekday"), results.get("day"), results.get("month"), results.get("year")));
         if (mTempFormat == "C") {
-            views.setTextViewText(R.id.temp_high, results.get("temp_high"));
-            views.setTextViewText(R.id.temp_low, results.get("temp_low"));
+            views.setTextViewText(R.id.textView_temp, results.get("temp_c"));
         } else if (mTempFormat == "F") {
-            views.setTextViewText(R.id.temp_high, convertTemperature(results.get("temp_high")));
-            views.setTextViewText(R.id.temp_low, convertTemperature(results.get("temp_low")));
+            views.setTextViewText(R.id.textView_temp, results.get("temp_f"));
         }
-        views.setTextViewText(R.id.location, mCityName);
+//        views.setTextViewText(R.id.location, results.get("city"));
+        views.setTextViewText(R.id.textView_weather, results.get("weather"));
 
         Intent intent = new Intent(context, WidgetConfigurationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -80,29 +78,23 @@ public class MomoWeatherWidget extends AppWidgetProvider {
         return icon;
     }
 
-    static HashMap<String, String> getWeather() {
+    static HashMap<String, String> getCurrentCondition(String mCityUri) {
         HashMap<String, String> map = new HashMap<String, String>();
         try {
             String jsonString = new WeatherStub().execute(mCityUri).get().toString();
             JSONObject jsonWeather = new JSONObject(jsonString);
 
-            JSONObject forecast = jsonWeather.getJSONObject("forecast");
-            JSONObject simpleforecast = forecast.getJSONObject("simpleforecast");
-            JSONArray forecastday = simpleforecast.getJSONArray("forecastday");
+            JSONObject current_observation = jsonWeather.getJSONObject("current_observation");
 
-            JSONObject period0 = forecastday.getJSONObject(0);
+            JSONObject display_location = current_observation.getJSONObject("display_location");
+            map.put("city", display_location.getString("city"));
 
-            JSONObject date = period0.getJSONObject("date");
-            JSONObject high = period0.getJSONObject("high");
-            JSONObject low = period0.getJSONObject("low");
+            map.put("weather", current_observation.getString("weather"));
 
-            map.put("icon", period0.getString("icon_url"));
-            map.put("weekday", date.getString("weekday"));
-            map.put("day", date.getString("day"));
-            map.put("month", date.getString("month"));
-            map.put("year", date.getString("year"));
-            map.put("temp_high", high.getString("celsius"));
-            map.put("temp_low", low.getString("celsius"));
+            map.put("temp_f", current_observation.getString("temp_f"));
+            map.put("temp_c", current_observation.getString("temp_c"));
+
+            map.put("icon", current_observation.getString("icon_url"));
 
         } catch (InterruptedException e) {
             e.printStackTrace();
