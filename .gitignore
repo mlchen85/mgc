@@ -35,6 +35,9 @@ local.properties
 # Eclipse
 .metadata
 .settings
+dist/
+gen-src/
+/*.ear
 
 #Apple DS Store
 .DS_Store
