@@ -32,5 +32,9 @@ local.properties
 *~
 *.swp
 
+# Eclipse
+.metadata
+.settings
+
 #Apple DS Store
 .DS_Store

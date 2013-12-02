@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax23="http://pojo.inbound.mgc.com/xsd" xmlns:xsd="http://interfaces.inbound.mgc.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://interfaces.inbound.mgc.com">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.inbound.mgc.com/xsd">
+            <xs:complexType name="LoginInfo">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="clientInfo" nillable="true" type="ax23:ClientInfo"/>
+                    <xs:element minOccurs="0" name="gameInfo" nillable="true" type="ax23:GameInfo"/>
+                    <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ClientInfo">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="clientIpAddress" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="clinetPortNumber" nillable="true" type="xs:int"/>
+                    <xs:element minOccurs="0" name="clinetType" nillable="true" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GameInfo">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:int"/>
+                    <xs:element minOccurs="0" name="gameName" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="LoginRT">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="errorInfo" nillable="true" type="ax23:ErrorInfo"/>
+                    <xs:element minOccurs="0" name="sessionId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="statusId" nillable="true" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorInfo">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="errorId" nillable="true" type="xs:int"/>
+                    <xs:element minOccurs="0" name="errorMessage" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GamingInfo">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="GamingRT">
+                <xs:sequence/>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax24="http://pojo.inbound.mgc.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://interfaces.inbound.mgc.com">
+            <xs:import namespace="http://pojo.inbound.mgc.com/xsd"/>
+            <xs:element name="doLogin">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="loginInfo" nillable="true" type="ax23:LoginInfo"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="doLoginResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="loginRT" nillable="true" type="ax23:LoginRT"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="doGaming">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="gamingInfo" nillable="true" type="ax23:GamingInfo"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="doGamingResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="gamingRT" nillable="true" type="ax23:GamingRT"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="doLoginRequest">
+        <wsdl:part name="parameters" element="xsd:doLogin"/>
+    </wsdl:message>
+    <wsdl:message name="doLoginResponse">
+        <wsdl:part name="parameters" element="xsd:doLoginResponse"/>
+    </wsdl:message>
+    <wsdl:message name="doGamingRequest">
+        <wsdl:part name="parameters" element="xsd:doGaming"/>
+    </wsdl:message>
+    <wsdl:message name="doGamingResponse">
+        <wsdl:part name="parameters" element="xsd:doGamingResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="InboundMessageServicesPortType">
+        <wsdl:operation name="doLogin">
+            <wsdl:input message="xsd:doLoginRequest" wsaw:Action="urn:doLogin"/>
+            <wsdl:output message="xsd:doLoginResponse" wsaw:Action="urn:doLoginResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="doGaming">
+            <wsdl:input message="xsd:doGamingRequest" wsaw:Action="urn:doGaming"/>
+            <wsdl:output message="xsd:doGamingResponse" wsaw:Action="urn:doGamingResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="InboundMessageServicesSoap11Binding" type="xsd:InboundMessageServicesPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="doLogin">
+            <soap:operation soapAction="urn:doLogin" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="doGaming">
+            <soap:operation soapAction="urn:doGaming" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="InboundMessageServicesSoap12Binding" type="xsd:InboundMessageServicesPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="doLogin">
+            <soap12:operation soapAction="urn:doLogin" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="doGaming">
+            <soap12:operation soapAction="urn:doGaming" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="InboundMessageServicesHttpBinding" type="xsd:InboundMessageServicesPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="doLogin">
+            <http:operation location="doLogin"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="doGaming">
+            <http:operation location="doGaming"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="InboundMessageServices">
+        <wsdl:port name="InboundMessageServicesHttpSoap11Endpoint" binding="xsd:InboundMessageServicesSoap11Binding">
+            <soap:address location="http://localhost:8080/MGC/services"/>
+        </wsdl:port>
+        <wsdl:port name="InboundMessageServicesHttpSoap12Endpoint" binding="xsd:InboundMessageServicesSoap12Binding">
+            <soap12:address location="http://localhost:8080/MGC/services"/>
+        </wsdl:port>
+        <wsdl:port name="InboundMessageServicesHttpEndpoint" binding="xsd:InboundMessageServicesHttpBinding">
+            <http:address location="http://localhost:8080/MGC/services"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

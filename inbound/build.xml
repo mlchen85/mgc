@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Mar 20, 2012 9:58:26 PM                                                        
+
+     ServiceInterface    
+     Ngauge Web Services Interfaces
+                   
+     Charles Chen                                                                
+     ====================================================================== -->
+<project name="MGC" default="all" basedir=".">
+	<description>
+    	Ngauge Web Services Interfaces
+    </description>
+	<property file="build.properties" />
+
+	<!-- ================================= 
+          target: default              
+         ================================= -->
+	<target name="all" depends="clean,package,build-ear" description="default" />
+
+	<target name="clean">
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${gen-src.dir}" />
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${dist.dir}" />
+			<filename name="MGC.ear" />
+		</delete>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: prepare                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="prepare">
+		<mkdir dir="${gen-src.dir}" />
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<path id="classpath">
+			<fileset dir="${axis.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<!--<fileset dir="${hibernate.dir}">
+				<include name="*.jar" />
+			</fileset>-->
+		</path>
+		<taskdef name="axis-wsdl2java" classname="org.apache.axis2.tool.ant.AntCodegenTask">
+			<classpath refid="classpath" />
+		</taskdef>
+		<taskdef name="axis-java2wsdl" classname="org.apache.axis2.tool.ant.Java2WSDLTask">
+			<classpath refid="classpath" />
+		</taskdef>
+	</target>
+
+	<!-- ================================= 
+          target: gen-src              
+         ================================= -->
+	<target name="gen-src" depends="prepare, gen-src-wsdl" />
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: gen-src-wsdl                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="gen-src-wsdl" depends="prepare">
+		<axis-wsdl2java language="java" databindingname="adb" wsdlfilename="${basedir}/InboundMessageServices.wsdl" output="${basedir}/${gen-src.dir}/" testcase="false" serverside="true" generateservicexml="true" generateallclasses="true" targetsourcefolderlocation="../${gen-src.dir}" servicename="InboundMessageServices" namespacetopackages="http://inbound.mgc.com=com.mgc.inbound" />
+	</target>
+
+	<!-- ================================= 
+          target: compile              
+         ================================= -->
+	<target name="compile" depends="gen-src">
+		<javac destdir="${bin.dir}" debug="on" deprecation="on" encoding="ISO-8859-1">
+			<src path="${gen-src.dir}" />
+			<src path="${src.dir}" />
+			<src path="${test.dir}" />
+			<classpath refid="classpath" />
+		</javac>
+		<copy todir="${bin.dir}">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java" />
+				<exclude name="**/*.xml" />
+				<exclude name="**/*.hbm.xml" />
+			</fileset>
+			<fileset dir="${gen-src.dir}" id="id">
+				<exclude name="**/*.java" />
+				<exclude name="**/*.xml" />
+				<exclude name="**/*.wsdl" />
+				<exclude name="**/*.hbm.xml" />
+			</fileset>
+			<fileset dir="${test.dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ================================= 
+          target: package              
+         ================================= -->
+	<target name="package" depends="compile">
+		<antcall target="build-axis-service-aar" />
+		<jar compress="false" destfile="${dist.dir}/MGC.jar" basedir="${bin.dir}" />
+		<war destfile="${dist.dir}/MGC.war" compress="false" update="false" duplicate="fail" casesensitive="true" webxml="${web.dir}/WEB-INF/web.xml">
+			<webinf dir="${web.dir}/WEB-INF" excludes="web.xml" />
+			<classes dir="${src.dir}" includes="**/registry.xml" />
+			<zipfileset dir="${dist.dir}" prefix="WEB-INF/services" includes="MGC.aar" />
+			<!--<zipfileset dir="${web.dir}/WEB-INF/classes" prefix="WEB-INF" includes="hibernate.cfg.xml, *.hbm.xml"/>-->
+		</war>
+	</target>
+
+	<!-- ================================= 
+          target: package-src              
+         ================================= -->
+	<target name="package-src" depends="package">
+		<jar destfile="${dist.dir}/MGC.jar" basedir="${gen-src.dir}" compress="false" update="true" includes="**/*.java" />
+		<jar destfile="${dist.dir}/MGC.jar" basedir="${src.dir}" compress="false" update="true" includes="**/*.java" />
+	</target>
+
+
+	<!-- ================================= 
+          target: build-axis-service-aar              
+         ================================= -->
+	<target name="build-axis-service-aar" depends="gen-src">
+		<jar compress="false" destfile="${dist.dir}/MGC.aar">
+			<zipfileset dir="${basedir}" prefix="META-INF" includes="InboundMessageServices.wsdl" />
+			<zipfileset dir="${web.dir}/META-INF" prefix="META-INF" includes="services.xml" />
+		</jar>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: build-ear                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="build-ear">
+		<jar destfile="MGC.ear">
+			<zipfileset dir="${web.dir}/META-INF" prefix="META-INF">
+				<include name="application.xml" />
+			</zipfileset>
+			<zipfileset dir="${dist.dir}">
+				<include name="MGC.jar" />
+				<include name="MGC.war" />
+			</zipfileset>
+			<!--<zipfileset dir="${src.dir}/ngauge/services/pojo" prefix="hibernate">
+				<include name="*.hbm.xml"/>
+			</zipfileset>-->
+			<zipfileset dir="${axis.dir}" includes="*.jar" prefix="lib" />
+			<zipfileset dir="${hibernate.dir}" includes="*.jar" prefix="lib" />
+		</jar>
+	</target>
+
+
+</project>

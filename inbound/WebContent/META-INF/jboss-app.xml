@@ -1,0 +1,5 @@
+<jboss-app>
+	<loader-repository>
+		com.mgc.inbound:archive=MGC.ear
+	</loader-repository>
+</jboss-app>

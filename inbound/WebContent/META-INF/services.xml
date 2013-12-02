@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: SNAPSHOT  Built on : Nov 10, 2010 (06:33:10 UTC) -->
+<serviceGroup>
+    <service name="InboundMessageServices">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.mgc.inbound.interfaces.InboundMessageServicesMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">com.mgc.inbound.InboundMessageServices</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="doLogin" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://interfaces.inbound.mgc.com">
+            <actionMapping>urn:doLogin</actionMapping>
+            <outputActionMapping>urn:doLoginResponse</outputActionMapping>
+        </operation>
+        <operation name="doGaming" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://interfaces.inbound.mgc.com">
+            <actionMapping>urn:doGaming</actionMapping>
+            <outputActionMapping>urn:doGamingResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>
